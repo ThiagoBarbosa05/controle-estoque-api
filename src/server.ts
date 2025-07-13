@@ -12,10 +12,7 @@ import { authenticate } from "./http/middleware.ts/authenticate";
 import { checkPermission } from "./http/middleware.ts/check-permissions";
 import { getAuthorizationCode } from "./integrations/get-authorization-code";
 import { getBlingAccessToken } from "./integrations/get-access-token";
-import { DynamoDBClient, GetItemCommand, GetItemCommandInput, GetResourcePolicyCommand, GetResourcePolicyCommandInput, ListTablesCommand, ListTablesCommandInput } from "@aws-sdk/client-dynamodb";
-import axios from "axios";
-import { InvokeAsyncCommandInput, InvokeCommand, InvokeCommandInput, LambdaClient } from "@aws-sdk/client-lambda";
-import { getRefreshTokenFromDynamoDB, handler } from "./integrations/refresh-bling-token";
+
 import { blingRouter } from "./http/routes/bling-route";
 
 
@@ -41,19 +38,15 @@ app.get(
 );
 
 
-const lambda = new LambdaClient({region: "us-east-2"})
 
-app.get("/api/invoices", async (req, res) => {
-  const result = await getAuthorizationCode()
-  
+app.get("/api/bling/code", async (req, res) => {
+  await getAuthorizationCode()
   res.send()
   return
-
-  
 })
 
 
-app.get("/api/bling/code", async (req, res) => {
+app.get("/api/bling/token", async (req, res) => {
   const { code } = req.query
 
   if (code) {
@@ -61,12 +54,12 @@ app.get("/api/bling/code", async (req, res) => {
     console.log(result)
   }
 
-  res.send( )
+  res.send()
   return
 })
 
 app.listen(3000, () => {
-  console.log("Server is listening on http://localhost:4000");
+  console.log("Server is listening");
 });
 
 // Quando o processo receber sinal de encerramento (Ctrl+C ou kill)
