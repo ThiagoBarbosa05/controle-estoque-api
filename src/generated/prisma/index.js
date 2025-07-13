@@ -217,7 +217,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "C:\\Users\\thiag\\dev\\controle-estoque-api\\src\\generated\\prisma",
+      "value": "C:\\Users\\thiag\\Downloads\\controle-estoque-api-20250712T235159Z-1-001\\controle-estoque-api\\src\\generated\\prisma",
       "fromEnvVar": null
     },
     "config": {
@@ -234,7 +234,7 @@ const config = {
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "C:\\Users\\thiag\\dev\\controle-estoque-api\\prisma\\schema.prisma",
+    "sourceFilePath": "C:\\Users\\thiag\\Downloads\\controle-estoque-api-20250712T235159Z-1-001\\controle-estoque-api\\prisma\\schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
@@ -248,11 +248,12 @@ const config = {
     "db"
   ],
   "activeProvider": "postgresql",
+  "postinstall": false,
   "inlineDatasources": {
     "db": {
       "url": {
         "fromEnvVar": "DATABASE_URL",
-        "value": "postgresql://docker:docker@localhost:5432/controle-estoque-db?schema=public"
+        "value": null
       }
     }
   },

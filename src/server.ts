@@ -3,7 +3,6 @@ import { customerRouter } from "./http/routes/customer-route";
 import { userRoute } from "./http/routes/user-route";
 import cors from "cors";
 import { dashboardMetricsController } from "./http/controllers/dashboard-metrics";
-import { prisma } from "./lib/prisma";
 import dotenv from "dotenv";
 import { wineRoute } from "./http/routes/wine-route";
 
@@ -63,14 +62,14 @@ app.listen(process.env.PORT || 3000, () => {
 });
 
 // Quando o processo receber sinal de encerramento (Ctrl+C ou kill)
-process.on("SIGINT", async () => {
-  console.log("SIGINT recebido: fechando Prisma...");
-  await prisma.$disconnect();
-  process.exit(0); // encerra o processo corretamente
-});
+// process.on("SIGINT", async () => {
+//   console.log("SIGINT recebido: fechando Prisma...");
+//   await prisma.$disconnect();
+//   process.exit(0); // encerra o processo corretamente
+// });
 
-process.on("SIGTERM", async () => {
-  console.log("SIGTERM recebido: fechando Prisma...");
-  await prisma.$disconnect();
-  process.exit(0);
-});
+// process.on("SIGTERM", async () => {
+//   console.log("SIGTERM recebido: fechando Prisma...");
+//   await prisma.$disconnect();
+//   process.exit(0);
+// });
