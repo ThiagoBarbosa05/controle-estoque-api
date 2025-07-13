@@ -1,0 +1,10 @@
+services:
+  controle-estoque-db-test:
+    image: bitnami/postgresql
+    container_name: controle-estoque-db-test
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: docker
+      POSTGRES_PASSWORD: docker
+      POSTGRES_DB: controle-estoque-db-test

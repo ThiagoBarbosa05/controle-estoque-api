@@ -1,138 +1,67 @@
-import { hash } from "bcryptjs";
-import { PrismaClient } from "../src/generated/prisma";
+import { PrismaClient, ConsignedStatus } from '../src/generated/prisma';
+import { faker } from '@faker-js/faker/locale/pt_BR';
+import { hash } from 'bcryptjs';
 
-const prisma = new PrismaClient({ log: ["query", "info", "warn", "error"] });
+const prisma = new PrismaClient();
 
-async function seed() {
-  //  await prisma.role.createMany({
-  //     data: [
-  //       { name: "administrador" },
-  //       { name: "vendedor" },
-  //       { name: "cliente" }
-  //     ]
-  //   })
+async function main() {
 
-  // await prisma.permission.create({
-  //   data: {
-  //     name: "all",
-  //     description: "Todas as permissões"
-  //   }
-  // })
+  await prisma.address.deleteMany({})
+  await prisma.customer.deleteMany({})
+  const customers = await prisma.customer.createMany({
+    data: Array.from({ length: 10 }).map(() => ({
+      name: faker.company.name(),
+      email: faker.internet.email(),
+      document: faker.string.numeric(14),
+      contactPerson: faker.person.fullName(),
+      cellphone: faker.phone.number(),
+      businessPhone: faker.phone.number(),
+      stateRegistration: faker.string.numeric(9),
+      createdAt: faker.date.past({ refDate: new Date('2025-06-01') }),
+    }))
+  })
 
-  // await prisma.rolePermission.create({
-  //   data: {
-  //     permissionId: "397c0549-2a27-4933-b773-c51de4154128",
-  //     roleId: "51769704-0dc9-4fa8-8ca8-503bda6e54e7",
-  //   },
-  // });
 
-  // const userCreated = await prisma.user.create({
-  //   data: {
-  //     name: "Admin Teste",
-  //     password: await hash("admin123", 6),
-  //     email: "admin@teste.com",
-  //   }
-  // })
+  const winesOnDatabase = await prisma.wine.findMany({})
+  const customersOnDatabase = await prisma.customer.findMany({})
+  for (const customer of customersOnDatabase) {
+    await prisma.address.create({
+      data: {
+        customerId: customer.id,
+        city: faker.location.city(),
+        state: faker.location.state(),
+        number: faker.location.buildingNumber(),
+        streetAddress: faker.location.streetAddress(),
+        zipCode: faker.location.zipCode(),
+        neighborhood: faker.location.street(),
+      }
+    })
 
-  // await prisma.permission.createMany({
-  // data: [
-  // {
-  //   name: "read:metrics",
-  //   description: "Visualizar métricas no dashboard",
-  // },
-  //     {
-  //       name: "read:metrics",
-  //       description: "Visualizar métricas no dashboard"
-  //     },
-  //     {
-  //       name: "read:customers",
-  //       description: "Visualizar clientes"
-  //     },
-  //     {
-  //       name: "create:customers",
-  //       description: "Criar novos clientes"
-  //     },
-  //     {
-  //       name: "update:customers",
-  //       description: "Atualizar dados dos clientes"
-  //     },
-  //     {
-  //       name: "delete:customers",
-  //       description: "Excluir clientes"
-  //     },
-  //     {
-  //       name: "read:users",
-  //       description: "Visualizar usuários"
-  //     },
-  //     {
-  //       name: "create:users",
-  //       description: "Criar novos usuários"
-  //     },
-  //     {
-  //       name: "update:users",
-  //       description: "Atualizar dados dos usuários"
-  //     },
-  //     {
-  //       name: "delete:users",
-  //       description: "Excluir usuários"
-  //     },
+    await prisma.consigned.create({
+      data: {
+        customerId: customer.id,
+        status: "EM_ANDAMENTO",
+        createdAt: faker.date.past({ refDate: new Date('2025-06-01') }),
+        winesOnConsigned: {
+          createMany: {
+            data: winesOnDatabase.map(wine => ({
+              wineId: wine.id,
+              balance: faker.number.int({ min: 1, max: 50 }),
+            }))
+          }
+        }
+      }
+    })
+  }
 
-  //     {
-  //       name: "read:consigned",
-  //       description: "Visualizar vendas consignadas"
-  //     },
-  //     {
-  //       name: "create:consigned",
-  //       description: "Criar novas vendas consignadas"
-  //     },
-  //     {
-  //       name: "update:consigned",
-  //       description: "Atualizar dados das vendas consignadas"
-  //     },
-  //     {
-  //       name: "delete:consigned",
-  //       description: "Excluir vendas consignadas"
-  //     },
-  //     {
-  //       name: "read:wines",
-  //       description: "Visualizar vinhos"
-  //     },
-  //     {
-  //       name: "create:wines",
-  //       description: "Criar novos vinhos"
-  //     },
-  //     {
-  //       name: "update:wines",
-  //       description: "Atualizar dados dos vinhos"
-  //     },
-  //     {
-  //       name: "delete:wines",
-  //       description: "Excluir vinhos"
-  //     }
-  //   ],
-  // });
 
-  // await prisma.rolePermission.create({
-  //   data: {
-  //     permissionId: "95b0aece-c667-42fa-af30-cbb4f4d8422d",
-  //     roleId: "f640a066-8466-4132-b2ac-78cc70b2aa5c"
-  //   }
-  // })
-
-  await prisma.userRole.create({
-    data: {
-      userId: "ae84c314-7421-44e8-9903-7a5af1e1d675",
-      roleId: "fe7d118e-876e-4805-a43c-8c8c3d06128b",
-    },
-  });
 }
 
-seed()
-  .then(async () => {
-    await prisma.$disconnect();
-  })
-  .catch(async (e) => {
-    console.error(e);
-    await prisma.$disconnect();
+main()
+  .catch((e) => {
+    console.error('Ocorreu um erro durante o processo de seed:', e);
     process.exit(1);
+  })
+  .finally(async () => {
+    await prisma.$disconnect();
   });

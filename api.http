@@ -1,0 +1,46 @@
+GET   http://localhost:3000/api/invoices
+
+###
+
+GET http://localhost:3000/api/bling/code
+
+###
+
+POST https://www.bling.com.br/Api/v3/oauth/token
+Content-Type: application/x-www-form-urlencoded
+Authorization: Basic YjBmYWM1Y2JkOTVjYTJhMzMzMzNjZGM3ODNlZTViMjRlNTEwMDkwYjplYjQwNjdjYmM0MGM1OGEwZDhiOWVkNjM3NGQzZjFiZDAzZjdmZmE2YWI4YjEyM2M0NDJhODUyOTVmODY=
+
+grant_type=refresh_token&refresh_token=da61920e4594646b9b57b63933f2ede0dc4931fe
+
+###
+POST https://h9gxyubov5.execute-api.us-east-2.amazonaws.com/oauth/callback
+Content-Type: application/json
+
+{
+  "teste": "JFDBGJSHFGVJHFVSFVYUSVYUSVSVSDVYSYVBSEVBISYUVBSYVFYUVSEYFVSYUEFVYUSVFUSE================>"
+}
+
+###
+
+POST http://localhost:3000/api/bling/webhook
+X-Bling-Signature: 3d0bea6ed085d97a8f1f12a7c652182676a79f9d8097d60c56461d3531f6e324
+Content-Type: application/json
+
+{
+  "id": 12345678,
+  "tipo": 1,
+  "situacao": 1,
+  "numero": "1234",
+  "dataEmissao": "2024-09-27 11:24:56",
+  "dataOperacao": "2024-09-27 11:00:00",
+  "contato": {
+    "id": 12345678
+  },
+  "naturezaOperacao": {
+    "id": 12345678
+  },
+  "loja": {
+    "id": 12345678
+  }
+}
+
