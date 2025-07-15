@@ -31,23 +31,23 @@ export async function getAuthorizationCode(): Promise<string | null> {
     
     console.log('Credenciais preenchidas, submetendo formulário...');             
 
-    // Intercepta a requisição de callback para pegar o código
-    page.on('request', (request) => {
-      const url = request.url();
-      if (url.startsWith(REDIRECT_URI)) {
-        const urlParams = new URLSearchParams(new URL(url).search);
-        const code = urlParams.get('code');
-        if (code) {
-          authorizationCode = code;
-          console.log('Código de autorização capturado com sucesso.');
-        }
-      }
-    });
+    // // Intercepta a requisição de callback para pegar o código
+    // page.on('request', (request) => {
+    //   const url = request.url();
+    //   if (url.startsWith(REDIRECT_URI)) {
+    //     const urlParams = new URLSearchParams(new URL(url).search);
+    //     const code = urlParams.get('code');
+    //     if (code) {
+    //       authorizationCode = code;
+    //       console.log('Código de autorização capturado com sucesso.');
+    //     }
+    //   }
+    // });
 
     await page.click('button[type="submit"]');
 
     // Aguarda a navegação ou um tempo limite
-    await page.waitForNavigation({ waitUntil: 'networkidle0' });
+    // await page.waitForNavigation({ waitUntil: 'networkidle0' });
 
   } catch (error) {
     console.error('Erro durante a automação do login no Bling:', error);
