@@ -30,7 +30,6 @@ RUN apt-get update && apt-get install -y \
     chromium \
     ca-certificates \
     fonts-liberation \
-    google-chrome-stable \
     libasound2 \
     libatk-bridge2.0-0 \
     libatk1.0-0 \
@@ -48,7 +47,7 @@ RUN apt-get update && apt-get install -y \
     wget \
  && apt-get clean && rm -rf /var/lib/apt/lists/*
 
- RUN apt install chromium-browser -y
+ RUN apt install google-chrome-stable -y
 
 # Define o path do Chrome que Puppeteer vai usar
 ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
