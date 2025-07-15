@@ -28,7 +28,10 @@ export async function getBlingAccessToken(code: string): Promise<void> {
 
      console.log('Tokens recebidos com sucesso!', access_token, refresh_token);
 
-    const db = new DynamoDBClient({ region: "us-east-2" });
+    const db = new DynamoDBClient({ region: "us-east-2", credentials: {
+      accessKeyId: process.env.AWS_ACCESS_KEY_ID as string,
+      secretAccessKey: process.env.AWS_SECRET_KEY as string
+    } });
 
     // const updateParams = {
     //   TableName: 'BlingToken',
