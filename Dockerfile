@@ -56,6 +56,8 @@ RUN corepack enable && corepack prepare pnpm@latest --activate
 COPY package.json pnpm-lock.yaml ./
 RUN pnpm install --frozen-lockfile --prod --scripts-prepend-node-path=auto
 
+RUN echo "enable-scripts=true" >> .npmrc && pnpm install --frozen-lockfile --prod
+
 RUN node -e "console.log(require('puppeteer').executablePath())"
 
 # Copia o build da aplicação e o Prisma Client
