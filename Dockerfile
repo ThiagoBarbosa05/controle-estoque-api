@@ -18,7 +18,6 @@ COPY src ./src
 RUN npx prisma generate
 RUN pnpm run build
 
----
 
 # Etapa 2: Produção leve com Puppeteer + Chrome + OpenSSL
 FROM node:22-slim
