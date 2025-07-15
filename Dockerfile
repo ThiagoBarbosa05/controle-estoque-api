@@ -70,7 +70,6 @@ RUN apt-get update && apt-get install -y \
 # USER pptruser
 
 # Define o path do Chrome que Puppeteer vai usar
-ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/google-chrome-stable
 
 # Instala pnpm e dependências de produção
 RUN corepack enable && corepack prepare pnpm@latest --activate
