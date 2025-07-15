@@ -54,7 +54,9 @@ ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
 RUN corepack enable && corepack prepare pnpm@latest --activate
 
 COPY package.json pnpm-lock.yaml ./
-RUN pnpm install --frozen-lockfile --prod
+RUN pnpm install --frozen-lockfile --prod --scripts-prepend-node-path=auto
+
+RUN node -e "console.log(require('puppeteer').executablePath())"
 
 # Copia o build da aplicação e o Prisma Client
 COPY --from=builder /app/dist ./dist
