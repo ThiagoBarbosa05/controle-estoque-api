@@ -30,6 +30,7 @@ RUN apt-get update && apt-get install -y \
     chromium \
     ca-certificates \
     fonts-liberation \
+    google-chrome-stable \
     libasound2 \
     libatk-bridge2.0-0 \
     libatk1.0-0 \
@@ -47,6 +48,8 @@ RUN apt-get update && apt-get install -y \
     wget \
  && apt-get clean && rm -rf /var/lib/apt/lists/*
 
+ RUN apt install chromium-browser -y
+
 # Define o path do Chrome que Puppeteer vai usar
 ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
 
@@ -56,9 +59,9 @@ RUN corepack enable && corepack prepare pnpm@latest --activate
 COPY package.json pnpm-lock.yaml ./
 RUN pnpm install --frozen-lockfile --prod --scripts-prepend-node-path=auto
 
+
 RUN echo "enable-scripts=true" >> .npmrc && pnpm install --frozen-lockfile --prod
 
-RUN node -e "console.log(require('puppeteer').executablePath())"
 
 # Copia o build da aplicação e o Prisma Client
 COPY --from=builder /app/dist ./dist
