@@ -33,43 +33,45 @@ export async function getBlingAccessToken(code: string): Promise<void> {
       secretAccessKey: process.env.AWS_SECRET_KEY as string
     } });
 
-    // const updateParams = {
-    //   TableName: 'BlingToken',
-    //   Key: {
-    //     id: { S: 'Bling' }, 
-    //   },
-    //   UpdateExpression: 'SET tokens.access_token = :access_token, tokens.refresh_token = :refresh_token',
-    //   ExpressionAttributeValues: {
-    //     ':access_token': { S: access_token },
-    //     ':refresh_token': { S: refresh_token },
-    //   },
-    // };
+    const updateParams = {
+      TableName: 'BlingToken',
+      Key: {
+        id: { S: 'Bling' }, 
+      },
+      UpdateExpression: 'SET tokens.access_token = :access_token, tokens.refresh_token = :refresh_token',
+      ExpressionAttributeValues: {
+        ':access_token': { S: access_token },
+        ':refresh_token': { S: refresh_token },
+      },
+    };
 
-    //  const updateTokenCommand = new UpdateItemCommand(updateParams);
-    //  const updatedTokenResponse = await db.send(updateTokenCommand);
+     const updateTokenCommand = new UpdateItemCommand(updateParams);
+     const updatedTokenResponse = await db.send(updateTokenCommand);
 
-    const accessTokenCommand = new PutItemCommand({
-        TableName: "BlingToken",
-        Item: {
-          id: { S: "bling_access_token" },
-          value: { S: access_token },
-        },
-      });
+     console.log(updatedTokenResponse)
+
+    // const accessTokenCommand = new PutItemCommand({
+    //     TableName: "BlingToken",
+    //     Item: {
+    //       id: { S: "bling_access_token" },
+    //       value: { S: access_token },
+    //     },
+    //   });
     
-      const refreshTokenCommand = new PutItemCommand({
-        TableName: "BlingToken",
-        Item: {
-          id: { S: "bling_refresh_token" },
-          value: { S: refresh_token },
-        },
-      });
+    //   const refreshTokenCommand = new PutItemCommand({
+    //     TableName: "BlingToken",
+    //     Item: {
+    //       id: { S: "bling_refresh_token" },
+    //       value: { S: refresh_token },
+    //     },
+    //   });
     
-      await Promise.all([
-        db.send(accessTokenCommand),
-        db.send(refreshTokenCommand),
-      ]);
-    // console.log('Tokens atualizados com sucesso', updatedTokenResponse)
-    console.log(access_token, refresh_token)
+    //   await Promise.all([
+    //     db.send(accessTokenCommand),
+    //     db.send(refreshTokenCommand),
+    //   ]);
+    // // console.log('Tokens atualizados com sucesso', updatedTokenResponse)
+    // console.log(access_token, refresh_token)
 
 
   } catch (error) {

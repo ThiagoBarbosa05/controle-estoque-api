@@ -47,7 +47,7 @@ export async function getAuthorizationCode(): Promise<string | null> {
     await page.click('button[type="submit"]');
 
     // Aguarda a navegação ou um tempo limite
-    // await page.waitForNavigation({ waitUntil: 'networkidle0' });
+    await page.waitForNavigation({ waitUntil: 'networkidle0' });
 
   } catch (error) {
     console.error('Erro durante a automação do login no Bling:', error);
