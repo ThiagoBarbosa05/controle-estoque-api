@@ -9,7 +9,7 @@ export async function getAuthorizationCode(): Promise<string | null> {
 
   const REDIRECT_URI = 'https://h9gxyubov5.execute-api.us-east-2.amazonaws.com/auth/callback';
 
-  const browser = await puppeteer.launch({ headless: true });
+  const browser = await puppeteer.launch({ headless: true , executablePath: '/usr/bin/chromium-browser'});
   const page = await browser.newPage(); 
   let authorizationCode: string | null = null;
 
